@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import googlemaps
+import json
 
 class DataReader:
     def __init__(self):
@@ -28,13 +29,17 @@ class DataReader:
 
     def csv_to_dframe(self) -> object:
         file = self.new_file()
-        return pd.read_csv(file, encoding='UTF-8')
+        return pd.read_csv(file, encoding='UTF-8', thousands=r',')
 
     def xls_to_dframe(self, header, usecols) -> object:
         file = self.new_file()
         return pd.read_excel(file, encoding='UTF-8', header=header, usecols=usecols)
 
     def create_gmaps(self):
-        gmaps = googlemaps.Client(key='...')
+        gmaps = googlemaps.Client(key='AIzaSyAqm6yYKtkFpynhmCk529CM4T3yVBo4S9E')
         # print(gmaps.geocode('서울중부경찰서', language='ko'))
-        return(gmaps)
+        return gmaps
+
+    def json_load(self):
+        file = self.new_file()
+        return json.load(open(file, encoding='utf-8'))
