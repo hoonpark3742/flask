@@ -36,7 +36,7 @@ class DataReader:
         return pd.read_excel(file, encoding='UTF-8', header=header, usecols=usecols)
 
     def create_gmaps(self):
-        gmaps = googlemaps.Client(key='AIzaSyAqm6yYKtkFpynhmCk529CM4T3yVBo4S9E')
+        gmaps = googlemaps.Client(key='...')
         # print(gmaps.geocode('서울중부경찰서', language='ko'))
         return gmaps
 
