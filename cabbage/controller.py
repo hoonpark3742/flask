@@ -22,4 +22,4 @@ class CabbageController:
             arr = np.array(data, dtype=np.float32)
             dict = sess.run(tf.matmul(X, W) + b, {X: arr[0:4]})
             print(dict[0])
-        result = int(dict[0])
+        return int(dict[0])
