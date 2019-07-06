@@ -13,12 +13,44 @@ from flask import Flask
 from flask import render_template, request, jsonify
 import re
 from calculator.controller import CalculatorController
+from members.controller import MemberController
+from cabbage.controller import CabbageController
 
 app = Flask(__name__)
 
 @app.route("/")
 def hello_world():
-    return render_template('index.html')
+    ctrl = MemberController()
+    ctrl.create_table()
+    return render_template('intro.html')
+
+@app.route("/cabbage", methods=['GET','POST'])
+def predict_cabbage():
+    # 컨트롤러가 가져온 값
+    # result = 6000
+    # render_params = {}
+    # render_params['result'] = result
+
+    avg_temp = request.form['avg_temp']
+    min_temp = request.form['min_temp']
+    max_temp = request.form['max_temp']
+    rain_fall = request.form['rain_fall']
+    ctrl = CabbageController(avg_temp, min_temp, max_temp, rain_fall)
+    view = ctrl.predict_cabbage(avg_temp, min_temp, max_temp, rain_fall)
+    return render_template(view)
+
+    #return render_template('cabbage.html', **render_params)
+
+@app.route("/login", methods=['POST'])
+def login():
+    print('로그인 들어옴')
+    userid = request.form['userid']
+    password = request.form['password']
+    print('userid %s' % (userid))
+    print('password %s' % (password))
+    ctrl = MemberController()
+    view = ctrl.login(userid, password)
+    return render_template(view)
 
 @app.route("/move/<path>")
 def move(path):
