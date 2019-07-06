@@ -1,35 +1,25 @@
-from cabbage import model
 import tensorflow as tf
-from flask_restful import reqparse
 import numpy as np
 
 class CabbageController:
-    def __init__(self):
-        pass
+    def __init__(self, avg_temp, min_temp, max_temp, rain_fall):
+        self.avg = avg_temp
+        self.min = min_temp
+        self.max = max_temp
+        self.rain = rain_fall
 
-    def service(self, avg_temp, min_temp, max_temp, rain_fall):
+    def service(self):
         X = tf.placeholder(tf.float32, shape=[None, 4])
-        Y = tf.placeholder(tf.float32, shape=[None, 1])
         W = tf.Variable(tf.random_normal([4, 1]), name='weight')
         b = tf.Variable(tf.random_normal([1]), name='bias')
-
-        # 가설 설정
-        # 식의 구성 : Y = WX + b
-        hypothesis = tf.matmul(X, W) + b
         saver = tf.train.Saver()
-        parser = reqparse.RequestParser()
-        parser.add_argument('avg_temp', required=True, type=float)
-        args = parser.parse_args()
-        avg_temp = float(args['avg_temp'])
 
         with tf.Session() as sess:
-            sess.run(model)
+            sess.run(tf.global_variables_initializer())
             save_path = 'cabbage/data/saved.ckpt'
             saver.restore(sess, save_path)
-            data = ((avg_temp, min_temp, max_temp, rain_fall))
+            data = [[self.avg, self.min, self.max, self.rain],]
             arr = np.array(data, dtype=np.float32)
-            x_data = arr[0:4]
-            dict = sess.run(hypothesis, feed_dict={X: x_data})
+            dict = sess.run(tf.matmul(X, W) + b, {X: arr[0:4]})
             print(dict[0])
         result = int(dict[0])
-        return result

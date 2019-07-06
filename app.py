@@ -30,16 +30,17 @@ def predict_cabbage():
     # result = 6000
     # render_params = {}
     # render_params['result'] = result
+    # return render_template('cabbage.html', **render_params)
 
     avg_temp = request.form['avg_temp']
     min_temp = request.form['min_temp']
     max_temp = request.form['max_temp']
     rain_fall = request.form['rain_fall']
     ctrl = CabbageController(avg_temp, min_temp, max_temp, rain_fall)
-    view = ctrl.predict_cabbage(avg_temp, min_temp, max_temp, rain_fall)
-    return render_template(view)
-
-    #return render_template('cabbage.html', **render_params)
+    result = ctrl.service()
+    render_params = {}
+    render_params['result'] = result
+    return render_template('cabbage.html', **render_params)
 
 @app.route("/login", methods=['POST'])
 def login():
